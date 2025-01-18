@@ -9,9 +9,23 @@ import Image from 'next/image';
 interface DrawerProps {
   selectedDay: Day | null;
   setSelectedDay: Dispatch<SetStateAction<Day | null>>
+  isDark: boolean;
 };
 
-export default function Drawer({ selectedDay, setSelectedDay }: DrawerProps) {
+function classNames(...classes: (string | boolean | undefined)[]) {
+  return classes.filter(Boolean).join(' ')
+}
+
+export default function Drawer({ selectedDay, setSelectedDay, isDark }: DrawerProps) {
+  const baseTheme = {
+    card: isDark ? 'bg-gray-800' : 'bg-white',
+    text: isDark ? 'text-white' : 'text-gray-800',
+    border: isDark ? 'border-gray-700' : 'border-gray-200',
+    buttonBg: isDark ? 'bg-gray-700' : 'bg-gray-100',
+    buttonHover: isDark ? 'hover:bg-gray-600' : 'hover:bg-gray-200',
+    backdrop: isDark ? 'bg-gray-600/75' : 'bg-gray-500/75'
+  };
+
   return (
     <Dialog
       open={selectedDay !== null}
@@ -20,7 +34,10 @@ export default function Drawer({ selectedDay, setSelectedDay }: DrawerProps) {
     >
       <DialogBackdrop
         transition
-        className="fixed inset-0 bg-gray-500/75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
+        className={classNames(
+          "fixed inset-0 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0",
+          baseTheme.backdrop
+        )}
       />
 
       <div className="fixed inset-0 overflow-hidden">
@@ -30,15 +47,15 @@ export default function Drawer({ selectedDay, setSelectedDay }: DrawerProps) {
               transition
               className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
             >
-              <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+              <div className={classNames("flex h-full flex-col overflow-y-scroll py-6 shadow-xl", baseTheme.card)}>
                 <div className="px-4 sm:px-6">
-                  <div className="flex items-start justify-between">
-                    <DialogTitle className="text-base font-semibold text-gray-900">Songs of <time dateTime={selectedDay?.date}>{selectedDay?.date}</time></DialogTitle>
+                  <div className={classNames("flex items-start justify-between", baseTheme.text)}>
+                    <DialogTitle className="text-base font-semibold">Songs of <time dateTime={selectedDay?.date}>{selectedDay?.date}</time></DialogTitle>
                     <div className="ml-3 flex h-7 items-center">
                       <button
                         type="button"
                         onClick={() => setSelectedDay(null)}
-                        className="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className={classNames("relative rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2", baseTheme.buttonBg, baseTheme.buttonHover)}
                       >
                         <span className="absolute -inset-2.5" />
                         <span className="sr-only">Close panel</span>
@@ -49,7 +66,7 @@ export default function Drawer({ selectedDay, setSelectedDay }: DrawerProps) {
                 </div>
                 <div className="relative mt-6 flex-1 px-4 sm:px-6">
                   {selectedDay?.events.map((event) => (
-                    <div key={event.id} className="flex items-center py-2 border-b border-gray-200">
+                    <div key={event.id} className={classNames("flex items-center py-4 border-b", baseTheme.border)}>
                       <Image
                         src={event.imageLink}
                         alt={"album cover for " + event.name}
@@ -58,7 +75,7 @@ export default function Drawer({ selectedDay, setSelectedDay }: DrawerProps) {
                         height="100"
                         unoptimized
                       />
-                      <div className="text-sm font-semibold text-gray-900 ml-3">{event.name}</div>
+                      <div className={classNames("text-sm font-semibold ml-3", baseTheme.text)}>{event.name}</div>
                     </div>
                   ))}
                 </div>

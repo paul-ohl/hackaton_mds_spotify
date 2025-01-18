@@ -119,7 +119,6 @@ export default function Calendar() {
     calendarDayBg: isDark ? 'bg-gray-800' : 'bg-white',
     calendarDayHover: isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100',
     inactiveDay: isDark ? 'bg-gray-900/50 text-gray-500' : 'bg-gray-50 text-gray-600',
-    accent: 'bg-indigo-600 hover:bg-indigo-500',
     accentText: 'text-indigo-600',
     shadow: isDark ? '' : 'shadow-lg',
     transition: 'transition-all duration-200 ease-in-out'
@@ -149,7 +148,7 @@ export default function Calendar() {
       baseTheme.layout,
       baseTheme.transition
     )}>
-      <Drawer selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+      <Drawer selectedDay={selectedDay} setSelectedDay={setSelectedDay} isDark={isDark} />
       <div className={classNames(
         "mx-auto max-w-7xl rounded-2xl",
         baseTheme.card,
