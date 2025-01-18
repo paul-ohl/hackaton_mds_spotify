@@ -174,7 +174,7 @@ const jsonData = JSON.stringify({
         ],
         "href": "https://api.spotify.com/v1/tracks/4rzfv0JLZfVhOhbSQ8o5jZ",
         "id": "4rzfv0JLZfVhOhbSQ8o5jZ",
-        "name": "Coffin dragger of the needless god",
+        "name": "Coffin dragger",
         "artistName": "Thy Art Is Murder",
       },
     },

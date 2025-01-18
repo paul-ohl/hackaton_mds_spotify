@@ -1,11 +1,9 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  EllipsisHorizontalIcon,
 } from '@heroicons/react/20/solid'
 import Link from 'next/link';
 import { getPlaylistTracks } from './fetch_songs';
@@ -15,6 +13,7 @@ const daysInitialValue: {
   events: {
     id: string,
     name: string,
+    imageLink: string,
     href: string
   }[];
   isCurrentMonth?: boolean;
@@ -53,7 +52,7 @@ const daysInitialValue: {
     },
     { date: '2022-01-13', isCurrentMonth: true, events: [] },
     { date: '2022-01-14', isCurrentMonth: true, events: [] },
-    { date: '2022-01-15', isSelected: true, isCurrentMonth: true, events: [] },
+    { date: '2022-01-15', isCurrentMonth: true, events: [] },
     { date: '2022-01-16', isCurrentMonth: true, events: [] },
     { date: '2022-01-17', isCurrentMonth: true, events: [] },
     { date: '2022-01-18', isCurrentMonth: true, events: [] },
@@ -95,17 +94,18 @@ function dateFromISO(dateString: string): string {
 
 export default function Calendar() {
   const [days, setDays] = React.useState(daysInitialValue);
-  const [selectedDay, setSelectedDay] = React.useState(days.find((day) => day.isSelected));
+  const [selectedDay, setSelectedDay] = React.useState(days.find((day) => day.isToday));
 
   useEffect(() => {
     getPlaylistTracks("37i9dQZF1DXcBWIGoYBM5M").then((data) => {
       const songsData = JSON.parse(data).items;
       setDays((days) => days.map((day) => {
-        const events: { id: string, name: string, href: string }[] = songsData
+        const events: { id: string, name: string, href: string, imageLink: string }[] = songsData
           .filter((song: any) => day.date === dateFromISO(song.added_at))
           .map((event: any) => ({
             id: event.added_at + event.track.id,
             name: event.track.name + ' - ' + event.track.artistName,
+            imageLink: event.track.album.images[0].url,
             href: event.track.href,
           }));
         day.events = events;
@@ -135,92 +135,25 @@ export default function Calendar() {
           <div className="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
             <button
               type="button"
-              className="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50"
+              className="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-600 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50"
             >
               <span className="sr-only">Previous month</span>
               <ChevronLeftIcon className="size-5" aria-hidden="true" />
             </button>
             <button
               type="button"
-              className="hidden border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block"
+              className="h-9 w-12 border-y border-gray-300 px-2 text-gray-600 hover:text-gray-800 focus:relative md:hover:bg-gray-50"
             >
               Today
             </button>
-            <span className="relative -mx-px h-5 w-px bg-gray-300 md:hidden" />
             <button
               type="button"
-              className="flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50"
+              className="flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-600 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50"
             >
               <span className="sr-only">Next month</span>
               <ChevronRightIcon className="size-5" aria-hidden="true" />
             </button>
           </div>
-          <Menu as="div" className="relative ml-6 md:hidden">
-            <MenuButton className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
-              <span className="sr-only">Open menu</span>
-              <EllipsisHorizontalIcon className="size-5" aria-hidden="true" />
-            </MenuButton>
-
-            <MenuItems
-              transition
-              className="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-            >
-              <div className="py-1">
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                  >
-                    Create event
-                  </a>
-                </MenuItem>
-              </div>
-              <div className="py-1">
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                  >
-                    Go to today
-                  </a>
-                </MenuItem>
-              </div>
-              <div className="py-1">
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                  >
-                    Day view
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                  >
-                    Week view
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                  >
-                    Month view
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                  >
-                    Year view
-                  </a>
-                </MenuItem>
-              </div>
-            </MenuItems>
-          </Menu>
         </div>
       </header>
       <div className="shadow ring-1 ring-black/5 lg:flex lg:flex-auto lg:flex-col">
@@ -247,7 +180,8 @@ export default function Calendar() {
             S<span className="sr-only sm:not-sr-only">un</span>
           </div>
         </div>
-        <div className="flex bg-gray-200 text-xs/6 text-gray-700 lg:flex-auto">
+
+        <div className="flex bg-gray-200 text-xs/6 lg:flex-auto">
           <div className="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
             {days.map((day) => (
               <div
@@ -261,7 +195,7 @@ export default function Calendar() {
                   dateTime={day.date}
                   className={
                     day.isToday
-                      ? 'flex size-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
+                      ? 'flex z-10 size-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white'
                       : undefined
                   }
                 >
@@ -272,13 +206,13 @@ export default function Calendar() {
                     {day.events.slice(0, 2).map((event) => (
                       <li key={event.id}>
                         <a href={event.href} className="group flex">
-                          <p className="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">
+                          <p className="flex-auto truncate font-medium">
                             {event.name}
                           </p>
                         </a>
                       </li>
                     ))}
-                    {day.events.length > 2 && <li className="text-gray-500">+ {day.events.length - 2} more</li>}
+                    {day.events.length > 2 && <li className="text-gray-600">+ {day.events.length - 2} more</li>}
                   </ol>
                 )}
               </div>
