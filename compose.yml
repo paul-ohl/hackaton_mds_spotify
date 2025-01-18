@@ -1,0 +1,11 @@
+services:
+  next:
+    container_name: next
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    working_dir: /app
+    volumes:
+      - ./src/musicalendar:/app
+    ports:
+      - 3000:3000
