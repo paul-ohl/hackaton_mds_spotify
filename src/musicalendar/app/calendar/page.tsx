@@ -11,8 +11,9 @@ import {
   CalendarIcon,
 } from '@heroicons/react/20/solid'
 import { getPlaylistTracks } from './fetch_songs';
+import Drawer from './_components/drawer';
 
-type Day = {
+export type Day = {
   date: string;
   events: Event[];
   isCurrentMonth?: boolean;
@@ -20,7 +21,7 @@ type Day = {
   isSelected?: boolean;
 };
 
-type Event = {
+export type Event = {
   id: string,
   name: string,
   imageLink: string,
@@ -101,9 +102,9 @@ function dateFromISO(dateString: string): string {
 }
 
 export default function Calendar() {
-  const [isDark, setIsDark] = useState(false);
-  const [days, setDays] = React.useState(daysInitialValue);
-  const [selectedDay, setSelectedDay] = React.useState(days.find((day) => day.isToday));
+  const [isDark, setIsDark] = useState(true);
+  const [days, setDays] = useState(daysInitialValue);
+  const [selectedDay, setSelectedDay] = useState<Day | null>(null);
   const [currentView, setCurrentView] = useState('month');
 
   const baseTheme = {
@@ -140,7 +141,7 @@ export default function Calendar() {
         return day;
       }));
     });
-  }, [])
+  }, []);
 
   return (
     <div className={classNames(
@@ -148,6 +149,7 @@ export default function Calendar() {
       baseTheme.layout,
       baseTheme.transition
     )}>
+      <Drawer selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
       <div className={classNames(
         "mx-auto max-w-7xl rounded-2xl",
         baseTheme.card,
@@ -331,7 +333,7 @@ export default function Calendar() {
                             baseTheme.transition
                           )}
                         >
-                          <a href="#" className="flex group">
+                          <a onClick={() => setSelectedDay(day)} className="flex group">
                             <p className="flex-auto truncate text-sm font-medium">
                               {event.name}
                             </p>
@@ -346,8 +348,10 @@ export default function Calendar() {
                             baseTheme.transition
                           )}
                         >
-                          <a href="#" className="flex group">
-                            + {day.events.length - 2} more
+                          <a onClick={() => setSelectedDay(day)} className="flex group">
+                            <p className="flex-auto truncate text-sm font-medium">
+                              + {day.events.length - 2} more
+                            </p>
                           </a>
                         </li>
                       )}
