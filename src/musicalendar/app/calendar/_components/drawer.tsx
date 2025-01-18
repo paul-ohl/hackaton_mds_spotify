@@ -48,9 +48,16 @@ export default function Drawer({ selectedDay, setSelectedDay }: DrawerProps) {
                   </div>
                 </div>
                 <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                  {selectedDay?.events.map((event, index) => (
+                  {selectedDay?.events.map((event) => (
                     <div key={event.id} className="flex items-center py-2 border-b border-gray-200">
-                      <img src={event.imageLink} alt={"album cover for " + event.name} className="rounded-md w-1/3" />
+                      <Image
+                        src={event.imageLink}
+                        alt={"album cover for " + event.name}
+                        className="rounded-md"
+                        width="100"
+                        height="100"
+                        unoptimized
+                      />
                       <div className="text-sm font-semibold text-gray-900 ml-3">{event.name}</div>
                     </div>
                   ))}
