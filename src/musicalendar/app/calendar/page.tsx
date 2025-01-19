@@ -7,10 +7,12 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   CalendarIcon,
+  ArrowLeftIcon,
 } from '@heroicons/react/20/solid'
 import { getPlaylistTracks } from './fetch_songs';
 import Drawer from './_components/drawer';
 import MonthView from './_components/month_view';
+import Link from 'next/link';
 
 export type Day = {
   date: string;
@@ -60,6 +62,9 @@ export default function Calendar() {
       <div className="mx-auto max-w-7xl rounded-2xl bg-white dark:bg-gray-800" >
         <header className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between border-b border-border dark:border-border-dark p-6" >
           <div className="flex items-center space-x-4">
+            <Link href="/">
+              <ArrowLeftIcon className="size-8 text-primary dark:text-primary-dark" />
+            </Link>
             <CalendarIcon className="size-8 text-accent dark:text-accent-dark" />
             <div>
               <h1 className="text-2xl font-bold text-accent dark:text-accent-dark">Calendar</h1>
