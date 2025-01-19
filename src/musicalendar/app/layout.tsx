@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import {SessionProvider} from "@/app/context/ClientSessionProvider";
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,14 +18,20 @@ export const metadata: Metadata = {
   description: 'Calendar to reflect on your year in music',
 };
 
-export default async function RootLayout({
+export default function RootLayout({
                                              children,
                                          }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
         <html lang="en">
-        <body className={geistMono.className}>
+        <body>
+        <SessionProvider>
+            <main>{children}</main>
+            <footer>
+                <p>Powered by Next.js and Spotify API</p>
+            </footer>
+        </SessionProvider>
         </body>
         </html>
     );

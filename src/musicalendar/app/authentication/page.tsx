@@ -1,24 +1,48 @@
-"use client"
+// app/login/page.tsx
+'use client';
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
-export default function Authentication() {
-    const { data: session } = useSession();
+const LoginPage = () => {
+    const router = useRouter();
 
-    if (!session) {
-        return (
-            <div>
-                <h1>You are not signed in</h1>
-                <button onClick={() => signIn("spotify")}>Sign in with Spotify</button>
-            </div>
-        );
-    }
+    const handleLogin = () => {
+        console.log('Login page'); // Debug log
+        alert('Button clicked'); // Optional debug alert
+        router.push('/api/auth/spotify');
+    };
 
     return (
-        <div>
-            <h1>Welcome, {session.user?.name}</h1>
-            <p>Access Token: {session.user?.accessToken}</p>
-            <button onClick={() => signOut()}>Sign out</button>
+        <div
+            style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+            }}
+        >
+            <div style={{ textAlign: 'center' }}>
+                <h1>Login to Spotify</h1>
+                <p>Click the button below to log in with your Spotify account.</p>
+                <button
+                    onClick={handleLogin}
+                    style={{
+                        padding: '10px 20px',
+                        fontSize: '16px',
+                        cursor: 'pointer',
+                        backgroundColor: '#1db954',
+                        border: 'none',
+                        borderRadius: '5px',
+                        color: 'white',
+                        fontWeight: 'bold',
+                    }}
+                >
+                    Login with Spotify
+                </button>
+            </div>
         </div>
     );
-}
+};
+
+export default LoginPage;
