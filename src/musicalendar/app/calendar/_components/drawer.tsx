@@ -8,22 +8,21 @@ import Image from 'next/image';
 
 interface DrawerProps {
   selectedDay: Day | null;
-  setSelectedDay: Dispatch<SetStateAction<Day | null>>
-  isDark: boolean;
+  setSelectedDay: Dispatch<SetStateAction<Day | null>>;
 };
 
 function classNames(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Drawer({ selectedDay, setSelectedDay, isDark }: DrawerProps) {
+export default function Drawer({ selectedDay, setSelectedDay }: DrawerProps) {
   const baseTheme = {
-    card: isDark ? 'bg-gray-800' : 'bg-white',
-    text: isDark ? 'text-white' : 'text-gray-800',
-    border: isDark ? 'border-gray-700' : 'border-gray-200',
-    buttonBg: isDark ? 'bg-gray-700' : 'bg-gray-100',
-    buttonHover: isDark ? 'hover:bg-gray-600' : 'hover:bg-gray-200',
-    backdrop: isDark ? 'bg-gray-600/75' : 'bg-gray-500/75'
+    card: 'dark:bg-gray-800 bg-white',
+    text: 'dark:text-white text-gray-800',
+    border: 'dark:border-gray-700 border-gray-200',
+    buttonBg: 'dark:bg-gray-700 bg-gray-100',
+    buttonHover: 'dark:hover:bg-gray-600 hover:bg-gray-200',
+    backdrop: 'dark:bg-gray-600/75 bg-gray-500/75'
   };
 
   return (
