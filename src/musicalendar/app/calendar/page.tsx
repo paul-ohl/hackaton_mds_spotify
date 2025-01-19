@@ -104,16 +104,6 @@ export default function Calendar() {
   const [selectedDay, setSelectedDay] = useState<Day | null>(null);
   const [currentView, setCurrentView] = useState('month');
 
-  const baseTheme = {
-    buttonBg: 'dark:bg-gray-700 bg-gray-200',
-    buttonHover: 'dark:hover:bg-gray-600 hover:bg-gray-300',
-    menuBg: 'dark:bg-gray-800 bg-white',
-    calendarDayBg: 'dark:bg-gray-800 bg-white',
-    calendarDayHover: 'dark:hover:bg-gray-700 hover:bg-gray-100',
-    inactiveDay: 'dark:bg-gray-900/50 bg-gray-50',
-    transition: 'transition-all duration-200 ease-in-out'
-  };
-
   useEffect(() => {
     getPlaylistTracks("37i9dQZF1DXcBWIGoYBM5M").then((data) => {
       const songsData = JSON.parse(data).items;
@@ -133,23 +123,15 @@ export default function Calendar() {
   }, []);
 
   return (
-    <div className={classNames(
-      "min-h-screen p-4 lg:p-8 bg-gray-50 dark:bg-gray-900",
-      baseTheme.transition
-    )}>
+    <div className="min-h-screen p-4 lg:p-8 bg-gray-50 dark:bg-gray-900" >
       <Drawer selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
-      <div className={classNames(
-        "mx-auto max-w-7xl rounded-2xl bg-white dark:bg-gray-800",
-        baseTheme.transition
-      )}>
-        <header className={classNames(
-          "flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between border-b border-border dark:border-border-dark p-6",
-        )}>
+      <div className="mx-auto max-w-7xl rounded-2xl bg-white dark:bg-gray-800" >
+        <header className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between border-b border-border dark:border-border-dark p-6" >
           <div className="flex items-center space-x-4">
-            <CalendarIcon className={classNames("size-8", "text-accent dark:text-accent-dark")} />
+            <CalendarIcon className="size-8 text-accent dark:text-accent-dark" />
             <div>
-              <h1 className={classNames("text-2xl font-bold", "text-accent dark:text-accent-dark")}>Calendar</h1>
-              <p className={"text-primary dark:text-primary-dark"}>January 2022</p>
+              <h1 className="text-2xl font-bold text-accent dark:text-accent-dark">Calendar</h1>
+              <p className="text-primary dark:text-primary-dark">January 2022</p>
             </div>
           </div>
 
@@ -158,40 +140,20 @@ export default function Calendar() {
             <div className="flex items-center rounded-lg shadow-sm">
               <button
                 type="button"
-                className={classNames(
-                  "flex h-10 w-10 items-center justify-center rounded-l-lg border",
-                  baseTheme.buttonBg,
-                  baseTheme.buttonHover,
-                  "border-border dark:border-border-dark",
-                  baseTheme.transition,
-                  "text-primary dark:text-primary-dark"
-                )}
+                className="flex h-10 w-10 items-center justify-center rounded-l-lg border dark:bg-gray-700 bg-gray-200 dark:hover:bg-gray-600 hover:bg-gray-300 border-border dark:border-border-dark text-primary dark:text-primary-dark"
               >
                 <ChevronLeftIcon className="size-5" />
               </button>
               <button
                 type="button"
-                className={classNames(
-                  "hidden px-4 font-medium border-y sm:block h-10",
-                  baseTheme.buttonBg,
-                  baseTheme.buttonHover,
-                  "border-border dark:border-border-dark",
-                  baseTheme.transition,
-                  "text-primary dark:text-primary-dark"
-                )}
+                className="hidden px-4 font-medium border-y sm:block h-10 dark:bg-gray-700 bg-gray-200 dark:hover:bg-gray-600 hover:bg-gray-300 border-border dark:border-border-dark text-primary dark:text-primary-dark"
               >
                 Today
               </button>
               <button
                 type="button"
-                className={classNames(
-                  "flex h-10 w-10 items-center justify-center rounded-r-lg border",
-                  baseTheme.buttonBg,
-                  baseTheme.buttonHover,
-                  "border-border dark:border-border-dark",
-                  baseTheme.transition,
-                  "text-primary dark:text-primary-dark"
-                )}
+                className=
+                "flex h-10 w-10 items-center justify-center rounded-r-lg border dark:bg-gray-700 bg-gray-200 dark:hover:bg-gray-600 hover:bg-gray-300 border-border dark:border-border-dark text-primary dark:text-primary-dark"
               >
                 <ChevronRightIcon className="size-5" />
               </button>
@@ -199,35 +161,18 @@ export default function Calendar() {
 
             {/* View Selector */}
             <Menu as="div" className="relative">
-              <MenuButton
-                className={classNames(
-                  "flex items-center space-x-2 rounded-lg px-4 py-2 border",
-                  baseTheme.buttonBg,
-                  baseTheme.buttonHover,
-                  "border-border dark:border-border-dark",
-                  baseTheme.transition,
-                  "text-primary dark:text-primary-dark"
-                )}
-              >
+              <MenuButton className="flex items-center space-x-2 rounded-lg px-4 py-2 border dark:bg-gray-700 bg-gray-200 dark:hover:bg-gray-600 hover:bg-gray-300 border-border dark:border-border-dark text-primary dark:text-primary-dark" >
                 <span>{currentView.charAt(0).toUpperCase() + currentView.slice(1)} view</span>
                 <ChevronDownIcon className="size-4" />
               </MenuButton>
 
-              <MenuItems
-                className={classNames(
-                  "absolute right-0 z-10 mt-2 w-40 rounded-lg py-1",
-                  baseTheme.menuBg,
-                  "text-primary dark:text-primary-dark",
-                  "ring-1 ring-black ring-opacity-5"
-                )}
-              >
+              <MenuItems className="absolute right-0 z-10 mt-2 w-40 rounded-lg py-1 dark:bg-gray-800 bg-white text-primary dark:text-primary-dark ring-1 ring-black ring-opacity-5" >
                 {['month', 'year'].map((view) => (
                   <MenuItem key={view}>
                     <button
                       onClick={() => setCurrentView(view)}
                       className={classNames(
-                        "block w-full px-4 py-2 text-left",
-                        baseTheme.buttonHover,
+                        "block w-full px-4 py-2 text-left dark:hover:bg-gray-600 hover:bg-gray-300",
                         view === currentView ? "text-accent dark:text-accent-dark" : ''
                       )}
                     >
@@ -246,11 +191,7 @@ export default function Calendar() {
             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
               <div
                 key={day}
-                className={classNames(
-                  "py-3",
-                  baseTheme.calendarDayBg,
-                  baseTheme.transition
-                )}
+                className="py-3 dark:bg-gray-800 bg-white"
               >
                 {day}
               </div>
@@ -264,10 +205,8 @@ export default function Calendar() {
                 <div
                   key={day.date}
                   className={classNames(
-                    day.isCurrentMonth ? baseTheme.calendarDayBg : baseTheme.inactiveDay,
-                    'group relative min-h-[100px] py-2 px-3 border-b border-border dark:border-border-dark',
-                    baseTheme.calendarDayHover,
-                    baseTheme.transition
+                    'group relative min-h-[100px] py-2 px-3 border-b border-border dark:border-border-dark dark:hover:bg-gray-700 hover:bg-gray-100 ',
+                    day.isCurrentMonth ? 'dark:bg-gray-800 bg-white' : 'dark:bg-gray-900/50 bg-gray-50',
                   )}
                 >
                   {/* Day number */}
@@ -278,7 +217,6 @@ export default function Calendar() {
                       day.isToday ? 'bg-indigo-600 text-white' : undefined,
                       day.isCurrentMonth ? "text-primary dark:text-primary-dark" : "text-secondary dark:text-secondary-dark",
                       'group-hover:bg-indigo-100 group-hover:text-indigo-600',
-                      baseTheme.transition
                     )}
                   >
                     {day.date.split('-').pop().replace(/^0/, '')}
@@ -290,11 +228,7 @@ export default function Calendar() {
                       {day.events.slice(0, 2).map((event) => (
                         <li
                           key={event.id}
-                          className={classNames(
-                            "rounded-md px-2",
-                            baseTheme.buttonHover,
-                            baseTheme.transition
-                          )}
+                          className="rounded-md px-2 dark:hover:bg-gray-600 hover:bg-gray-300"
                         >
                           <a onClick={() => setSelectedDay(day)} className="flex group">
                             <p className="flex-auto truncate text-sm font-medium">
@@ -304,13 +238,7 @@ export default function Calendar() {
                         </li>
                       ))}
                       {day.events.length > 2 && (
-                        <li
-                          className={classNames(
-                            "rounded-md px-2",
-                            baseTheme.buttonHover,
-                            baseTheme.transition
-                          )}
-                        >
+                        <li className="rounded-md px-2 dark:hover:bg-gray-600 hover:bg-gray-300" >
                           <a onClick={() => setSelectedDay(day)} className="flex group">
                             <p className="flex-auto truncate text-sm font-medium">
                               + {day.events.length - 2} more
@@ -326,6 +254,6 @@ export default function Calendar() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
