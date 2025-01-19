@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
 
         // Step 2: Handle the token (store it in a cookie)
-        const { access_token, refresh_token, expires_in, scope } = tokenResponse.data;
+        const { access_token, refresh_token, expires_in, scope, token_type } = tokenResponse.data;
 
         const userResponse = await axios.get('https://api.spotify.com/v1/me', {
             headers: {
@@ -53,6 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 refresh_token,
                 expires_in,
                 scope,
+                token_type
             },
         };
 
