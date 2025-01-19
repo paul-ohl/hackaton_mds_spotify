@@ -17,16 +17,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${inter.className} min-h-screen transition-colors duration-200`}>
-              <ThemeProvider>
-                  <PlaylistProvider>{children}</PlaylistProvider>
-              </ThemeProvider>
-              <AuthProvider>
-                  {children}
-              </AuthProvider>
-        </body>
-      </html>
+    return (
+        <html lang="en" suppressHydrationWarning>
+            <body className={`${inter.className} min-h-screen transition-colors duration-200`}>
+                <ThemeProvider>
+                    <PlaylistProvider>{children}</PlaylistProvider>
+                </ThemeProvider>
+                <AuthProvider>
+                    {children}
+                </AuthProvider>
+            </body>
+        </html>
   );
 }
