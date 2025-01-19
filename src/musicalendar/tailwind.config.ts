@@ -23,8 +23,8 @@ export default {
           dark: colors.indigo[600],
         },
         border: {
-          DEFAULT: colors.gray[700],
-          dark: colors.gray[200],
+          DEFAULT: colors.gray[300],
+          dark: colors.gray[500],
         },
       },
     },

@@ -143,7 +143,7 @@ export default function Calendar() {
         baseTheme.transition
       )}>
         <header className={classNames(
-          "flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between border-b p-6",
+          "flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between border-b border-border dark:border-border-dark p-6",
         )}>
           <div className="flex items-center space-x-4">
             <CalendarIcon className={classNames("size-8", "text-accent dark:text-accent-dark")} />
@@ -240,14 +240,14 @@ export default function Calendar() {
           </div>
         </header>
 
-        <div className="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+        <div className="shadow lg:flex lg:flex-auto lg:flex-col">
           {/* Weekday Headers */}
           <div className="grid grid-cols-7 gap-px border-b text-center text-xs font-medium border-border dark:border-border-dark text-primary dark:text-primary-dark">
             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
               <div
                 key={day}
                 className={classNames(
-                  "py-3 border border-border dark:border-border-dark",
+                  "py-3",
                   baseTheme.calendarDayBg,
                   baseTheme.transition
                 )}
@@ -265,7 +265,7 @@ export default function Calendar() {
                   key={day.date}
                   className={classNames(
                     day.isCurrentMonth ? baseTheme.calendarDayBg : baseTheme.inactiveDay,
-                    'group relative min-h-[100px] py-2 px-3',
+                    'group relative min-h-[100px] py-2 px-3 border-b border-border dark:border-border-dark',
                     baseTheme.calendarDayHover,
                     baseTheme.transition
                   )}
