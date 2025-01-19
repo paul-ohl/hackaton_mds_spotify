@@ -1,15 +1,20 @@
 import PlaylistForm from './components/PlaylistForm';
 import SavedPlaylists from './components/SavedPlaylists';
+import { ThemeProvider } from './context/ThemeContext';
+import ThemeToggle from './components/ThemeToggle';
 
 export default function Home() {
   return (
-    <div>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div>
+    <ThemeProvider>
+      <main className="min-h-screen">
+        <ThemeToggle />
+        <div className="container mx-auto px-4 py-8">
           <PlaylistForm />
-          <SavedPlaylists />
+          <div className="mt-8">
+            <SavedPlaylists />
+          </div>
         </div>
       </main>
-    </div>
+    </ThemeProvider>
   );
 }

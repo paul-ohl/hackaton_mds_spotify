@@ -4,64 +4,63 @@ import { usePlaylist } from '../context/PlaylistContext';
 import { useEffect } from 'react';
 
 export default function SavedPlaylists() {
-  const { playlists, removePlaylist, refreshPlaylists, isLoading } =
-    usePlaylist();
+  const { playlists, removePlaylist, refreshPlaylists, isLoading } = usePlaylist();
 
-  // Fetch playlists on component mount
   useEffect(() => {
     refreshPlaylists();
   }, []);
 
   return (
-    <div className="mt-8 max-w-2xl mx-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Playlists Sauvegardées</h2>
+    <div className="max-w-2xl mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-semibold">Playlists Sauvegardées</h2>
         <button
           onClick={() => refreshPlaylists()}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50"
+          className="btn-accent px-4 py-2 rounded-lg disabled:opacity-50"
           disabled={isLoading}
         >
           {isLoading ? 'Chargement...' : 'Rafraîchir'}
         </button>
       </div>
 
-      {false && (
-        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-          error
-        </div>
-      )}
-
       {playlists.length === 0 ? (
-        <p className="text-gray-500">Aucune playlist sauvegardée</p>
+        <p className="text-secondary text-center py-8">Aucune playlist sauvegardée</p>
       ) : (
         <div className="space-y-4">
           {playlists.map((playlist) => (
-            <div
-              key={playlist.id}
-              className="bg-white shadow-md rounded-lg p-4"
-            >
-              <div className="flex justify-between items-start mb-4">
+            <div key={playlist.id} className="card rounded-lg p-4">
+              <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-medium">{playlist.name}</h3>
-                  <p className="text-sm text-gray-500">ID: {playlist.id}</p>
-                  <p className="text-sm text-gray-500">
-                    Dernière mise à jour:{' '}
-                    {new Date(playlist.lastFetched).toLocaleString('fr-FR')}
+                  <h3 className="font-medium text-lg">{playlist.name}</h3>
+                  <p className="text-secondary text-sm">ID: {playlist.id}</p>
+                  <p className="text-secondary text-sm">
+                    Dernière mise à jour: {new Date(playlist.lastFetched).toLocaleString('fr-FR')}
                   </p>
                 </div>
                 <button
                   onClick={() => removePlaylist(playlist.id)}
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 p-1"
+                  aria-label="Supprimer la playlist"
                 >
-                  Supprimer
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
                 </button>
               </div>
 
               {playlist.tracks && (
-                <div className="mt-4">
-                  <h4 className="font-medium mb-2">
-                    Pistes ({playlist.tracks.items.length})
-                  </h4>
+                <div className="mt-4 border-t pt-4">
+                  <h4 className="font-medium mb-3">Pistes ({playlist.tracks.items.length})</h4>
                   <div className="max-h-60 overflow-y-auto">
                     {playlist.tracks.items.map((item, index) => (
                       <div
@@ -75,11 +74,8 @@ export default function SavedPlaylists() {
                         />
                         <div className="ml-3">
                           <p className="font-medium">{item.track.name}</p>
-                          <p className="text-sm text-gray-500">
-                            Ajouté le:{' '}
-                            {new Date(item.added_at).toLocaleDateString(
-                              'fr-FR',
-                            )}
+                          <p className="text-secondary text-sm">
+                            Ajouté le: {new Date(item.added_at).toLocaleDateString('fr-FR')}
                           </p>
                         </div>
                       </div>
