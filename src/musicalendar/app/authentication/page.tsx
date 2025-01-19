@@ -8,8 +8,6 @@ const LoginPage = () => {
     const router = useRouter();
 
     const handleLogin = () => {
-        console.log('Login page'); // Debug log
-        alert('Button clicked'); // Optional debug alert
         router.push('/api/auth/spotify');
     };
 
