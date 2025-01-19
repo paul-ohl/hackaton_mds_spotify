@@ -10,115 +10,47 @@ import {
 } from '@heroicons/react/20/solid'
 import { getPlaylistTracks } from './fetch_songs';
 import Drawer from './_components/drawer';
+import MonthView from './_components/month_view';
 
 export type Day = {
   date: string;
-  events: Event[];
+  events: Song[];
   isCurrentMonth?: boolean;
   isToday?: boolean;
   isSelected?: boolean;
 };
 
-export type Event = {
+export type Song = {
   id: string,
   name: string,
+  dateAdded: Date,
   imageLink: string,
   href: string
 };
-
-const daysInitialValue: Day[] = [
-  { date: '2021-12-27', events: [] },
-  { date: '2021-12-28', events: [] },
-  { date: '2021-12-29', events: [] },
-  { date: '2021-12-30', events: [] },
-  { date: '2021-12-31', events: [] },
-  { date: '2022-01-01', isCurrentMonth: true, events: [] },
-  { date: '2022-01-02', isCurrentMonth: true, events: [] },
-  {
-    date: '2022-01-03',
-    isCurrentMonth: true,
-    events: [],
-  },
-  { date: '2022-01-04', isCurrentMonth: true, events: [] },
-  { date: '2022-01-05', isCurrentMonth: true, events: [] },
-  { date: '2022-01-06', isCurrentMonth: true, events: [] },
-  {
-    date: '2022-01-07',
-    isCurrentMonth: true,
-    events: [],
-  },
-  { date: '2022-01-08', isCurrentMonth: true, events: [] },
-  { date: '2022-01-09', isCurrentMonth: true, events: [] },
-  { date: '2022-01-10', isCurrentMonth: true, events: [] },
-  { date: '2022-01-11', isCurrentMonth: true, events: [] },
-  {
-    date: '2022-01-12',
-    isCurrentMonth: true,
-    isToday: true,
-    events: [],
-  },
-  { date: '2022-01-13', isCurrentMonth: true, events: [] },
-  { date: '2022-01-14', isCurrentMonth: true, events: [] },
-  { date: '2022-01-15', isCurrentMonth: true, events: [] },
-  { date: '2022-01-16', isCurrentMonth: true, events: [] },
-  { date: '2022-01-17', isCurrentMonth: true, events: [] },
-  { date: '2022-01-18', isCurrentMonth: true, events: [] },
-  { date: '2022-01-19', isCurrentMonth: true, events: [] },
-  { date: '2022-01-20', isCurrentMonth: true, events: [] },
-  { date: '2022-01-21', isCurrentMonth: true, events: [] },
-  {
-    date: '2022-01-22',
-    isCurrentMonth: true,
-    events: [],
-  },
-  { date: '2022-01-23', isCurrentMonth: true, events: [] },
-  { date: '2022-01-24', isCurrentMonth: true, events: [] },
-  { date: '2022-01-25', isCurrentMonth: true, events: [] },
-  { date: '2022-01-26', isCurrentMonth: true, events: [] },
-  { date: '2022-01-27', isCurrentMonth: true, events: [] },
-  { date: '2022-01-28', isCurrentMonth: true, events: [] },
-  { date: '2022-01-29', isCurrentMonth: true, events: [] },
-  { date: '2022-01-30', isCurrentMonth: true, events: [] },
-  { date: '2022-01-31', isCurrentMonth: true, events: [] },
-  { date: '2022-02-01', events: [] },
-  { date: '2022-02-02', events: [] },
-  { date: '2022-02-03', events: [] },
-  {
-    date: '2022-02-04',
-    events: [],
-  },
-  { date: '2022-02-05', events: [] },
-  { date: '2022-02-06', events: [] },
-]
 
 function classNames(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-function dateFromISO(dateString: string): string {
-  return dateString.split('T')[0];
-}
-
 export default function Calendar() {
-  const [days, setDays] = useState(daysInitialValue);
   const [selectedDay, setSelectedDay] = useState<Day | null>(null);
   const [currentView, setCurrentView] = useState('month');
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [songs, setSongs] = useState<Song[]>([]);
+
+  const formatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
 
   useEffect(() => {
     getPlaylistTracks("37i9dQZF1DXcBWIGoYBM5M").then((data) => {
       const songsData = JSON.parse(data).items;
-      setDays((days) => days.map((day) => {
-        const events: Event[] = songsData
-          .filter((song: any) => day.date === dateFromISO(song.added_at))
-          .map((event: any) => ({
-            id: event.added_at + event.track.id,
-            name: event.track.name + ' - ' + event.track.artistName,
-            imageLink: event.track.album.images[0].url,
-            href: event.track.href,
-          }));
-        day.events = events;
-        return day;
-      }));
+      setSongs(songsData
+        .map((s: any) => ({
+          id: s.added_at + s.track.id,
+          name: s.track.name + ' - ' + s.track.artistName,
+          dateAdded: new Date(s.added_at),
+          imageLink: s.track.album.images[0].url,
+          href: s.track.href,
+        })));
     });
   }, []);
 
@@ -131,7 +63,7 @@ export default function Calendar() {
             <CalendarIcon className="size-8 text-accent dark:text-accent-dark" />
             <div>
               <h1 className="text-2xl font-bold text-accent dark:text-accent-dark">Calendar</h1>
-              <p className="text-primary dark:text-primary-dark">January 2022</p>
+              <p className="text-primary dark:text-primary-dark">{formatter.format(currentDate)}</p>
             </div>
           </div>
 
@@ -141,12 +73,14 @@ export default function Calendar() {
               <button
                 type="button"
                 className="flex h-10 w-10 items-center justify-center rounded-l-lg border dark:bg-gray-700 bg-gray-200 dark:hover:bg-gray-600 hover:bg-gray-300 border-border dark:border-border-dark text-primary dark:text-primary-dark"
+                onClick={() => setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() - 1, d.getDate()))}
               >
                 <ChevronLeftIcon className="size-5" />
               </button>
               <button
                 type="button"
                 className="hidden px-4 font-medium border-y sm:block h-10 dark:bg-gray-700 bg-gray-200 dark:hover:bg-gray-600 hover:bg-gray-300 border-border dark:border-border-dark text-primary dark:text-primary-dark"
+                onClick={() => setCurrentDate(new Date())}
               >
                 Today
               </button>
@@ -154,6 +88,7 @@ export default function Calendar() {
                 type="button"
                 className=
                 "flex h-10 w-10 items-center justify-center rounded-r-lg border dark:bg-gray-700 bg-gray-200 dark:hover:bg-gray-600 hover:bg-gray-300 border-border dark:border-border-dark text-primary dark:text-primary-dark"
+                onClick={() => setCurrentDate((d) => new Date(d.getFullYear(), d.getMonth() + 1, d.getDate()))}
               >
                 <ChevronRightIcon className="size-5" />
               </button>
@@ -185,74 +120,7 @@ export default function Calendar() {
           </div>
         </header>
 
-        <div className="shadow lg:flex lg:flex-auto lg:flex-col">
-          {/* Weekday Headers */}
-          <div className="grid grid-cols-7 gap-px border-b text-center text-xs font-medium border-border dark:border-border-dark text-primary dark:text-primary-dark">
-            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-              <div
-                key={day}
-                className="py-3 dark:bg-gray-800 bg-white"
-              >
-                {day}
-              </div>
-            ))}
-          </div>
-
-          {/* Calendar Grid */}
-          <div className="flex flex-auto overflow-hidden">
-            <div className="w-full grid grid-cols-7 grid-rows-6 gap-px">
-              {days.map((day) => (
-                <div
-                  key={day.date}
-                  className={classNames(
-                    'group relative min-h-[100px] py-2 px-3 border-b border-border dark:border-border-dark dark:hover:bg-gray-700 hover:bg-gray-100 ',
-                    day.isCurrentMonth ? 'dark:bg-gray-800 bg-white' : 'dark:bg-gray-900/50 bg-gray-50',
-                  )}
-                >
-                  {/* Day number */}
-                  <time
-                    dateTime={day.date}
-                    className={classNames(
-                      "flex size-6 items-center justify-center rounded-full",
-                      day.isToday ? 'bg-indigo-600 text-white' : undefined,
-                      day.isCurrentMonth ? "text-primary dark:text-primary-dark" : "text-secondary dark:text-secondary-dark",
-                      'group-hover:bg-indigo-100 group-hover:text-indigo-600',
-                    )}
-                  >
-                    {day.date.split('-').pop().replace(/^0/, '')}
-                  </time>
-
-                  {/* Songs list */}
-                  {day.events.length > 0 && (
-                    <ol className="mt-2 space-y-1 text-primary dark:text-primary-dark">
-                      {day.events.slice(0, 2).map((event) => (
-                        <li
-                          key={event.id}
-                          className="rounded-md px-2 dark:hover:bg-gray-600 hover:bg-gray-300"
-                        >
-                          <a onClick={() => setSelectedDay(day)} className="flex group">
-                            <p className="flex-auto truncate text-sm font-medium">
-                              {event.name}
-                            </p>
-                          </a>
-                        </li>
-                      ))}
-                      {day.events.length > 2 && (
-                        <li className="rounded-md px-2 dark:hover:bg-gray-600 hover:bg-gray-300" >
-                          <a onClick={() => setSelectedDay(day)} className="flex group">
-                            <p className="flex-auto truncate text-sm font-medium">
-                              + {day.events.length - 2} more
-                            </p>
-                          </a>
-                        </li>
-                      )}
-                    </ol>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <MonthView currentDate={currentDate} setSelectedDay={setSelectedDay} songs={songs} />
       </div>
     </div >
   );
