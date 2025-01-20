@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "SPOTIFY_MUSICALENDAR",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

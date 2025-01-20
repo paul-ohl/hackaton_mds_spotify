@@ -1,0 +1,17 @@
+meta {
+  name: GET API TOKEN
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://accounts.spotify.com/api/token
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  grant_type: client_credentials
+  client_id: {{client_id}}
+  client_secret: {{client_secret}}
+}

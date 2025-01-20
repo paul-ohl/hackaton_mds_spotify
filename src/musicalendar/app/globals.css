@@ -5,17 +5,47 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --card-bg: #ffffff;
+  --card-border: #e5e7eb;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --text-secondary: #4b5563;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.dark {
+  --background: #171717;
+  --foreground: #ffffff;
+  --card-bg: #262626;
+  --card-border: #404040;
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+  --text-secondary: #9ca3af;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom component styles */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.btn-accent:hover {
+  background-color: var(--accent-hover);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
 }
