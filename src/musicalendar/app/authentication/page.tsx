@@ -1,14 +1,31 @@
-// app/login/page.tsx
 'use client';
 
-import { useRouter } from 'next/navigation';
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import querystring from 'querystring';
 
-const LoginPage = () => {
+const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI;
+
+const scopes = ['user-read-private', 'user-read-email'];
+
+const AuthenticationPage = () => {
     const router = useRouter();
 
     const handleLogin = () => {
-        router.push('/api/auth/spotify');
+        if (!clientId || !redirectUri) {
+            return console.error('Missing CLIENT_ID or REDIRECT_URI in environment variables.');
+        }
+
+        const spotifyAuthUrl = `https://accounts.spotify.com/authorize?${querystring.stringify({
+            client_id: clientId,
+            response_type: 'code',
+            redirect_uri: redirectUri,
+            scope: scopes.join(' '),
+        })}`;
+
+        // Redirect to Spotify login
+        router.push(spotifyAuthUrl);
     };
 
     return (
@@ -43,4 +60,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default AuthenticationPage;

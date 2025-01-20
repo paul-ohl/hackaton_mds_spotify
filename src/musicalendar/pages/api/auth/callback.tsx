@@ -3,7 +3,9 @@ import axios from 'axios';
 import querystring from 'querystring';
 import { setAuthCookie } from '@/app/utils/cookies'; // Import the setAuthCookie function
 
-const { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, SESSION_SECRET } = process.env;
+const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI;
+const clientSecret = process.env.CLIENT_SECRET;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { code } = req.query;
@@ -19,9 +21,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             querystring.stringify({
                 grant_type: 'authorization_code',
                 code: code as string,
-                redirect_uri: REDIRECT_URI,
-                client_id: CLIENT_ID,
-                client_secret: CLIENT_SECRET,
+                redirect_uri: redirectUri,
+                client_id: clientId,
+                client_secret: clientSecret,
             }),
             {
                 headers: {
