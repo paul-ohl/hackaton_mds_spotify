@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Day, Song } from "../page";
+import { Day } from "../page";
+import { SpotifyTrack } from "@/app/types/spotify";
 
 function classNames(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(' ')
@@ -9,7 +10,7 @@ function formatDate(date: Date) {
   return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 }
 
-function getDaysArray(currentDate: Date, songs: Song[]) {
+function getDaysArray(currentDate: Date, songs: SpotifyTrack[]) {
   const startOfWeekDay = 1; // Monday
   // const areSongsDisplayedEveryYear = false; // Display songs from previous years
 
@@ -24,14 +25,13 @@ function getDaysArray(currentDate: Date, songs: Song[]) {
     return Array.from({ length }, (_, i) => {
       const date = new Date(startDate);
       date.setDate(date.getDate() + i);
-      return {
+      const day: Day = {
         date: formatDate(date),
         isToday: date.toDateString() === today.toDateString(),
         isCurrentMonth,
-        events: songs.filter((song) => {
-          return song.dateAdded.toDateString() === date.toDateString();
-        })
+        tracks: songs.filter((song) => new Date(song.added_at).toDateString() === date.toDateString())
       };
+      return day;
     });
   };
 
@@ -60,8 +60,6 @@ function getDaysArray(currentDate: Date, songs: Song[]) {
     false
   );
 
-  console.log(daysOfMonth);
-
   // Combine all days and set state
   return ([...daysBefore, ...daysOfMonth, ...daysAfter]);
 }
@@ -69,7 +67,7 @@ function getDaysArray(currentDate: Date, songs: Song[]) {
 interface MonthViewProps {
   currentDate: Date;
   setSelectedDay: Dispatch<SetStateAction<Day | null>>;
-  songs: Song[];
+  songs: SpotifyTrack[];
 }
 
 export default function MonthView({ currentDate, setSelectedDay, songs }: MonthViewProps) {
@@ -114,29 +112,29 @@ export default function MonthView({ currentDate, setSelectedDay, songs }: MonthV
                   'group-hover:bg-indigo-100 group-hover:text-indigo-600',
                 )}
               >
-                {day.date.split('-').pop().replace(/^0/, '')}
+                {day.date.split('-').pop()?.replace(/^0/, '')}
               </time>
 
               {/* Songs list */}
-              {day.events.length > 0 && (
+              {day.tracks.length > 0 && (
                 <ol className="mt-2 space-y-1 text-primary dark:text-primary-dark">
-                  {day.events.slice(0, 2).map((event) => (
+                  {day.tracks.slice(0, 2).map((event) => (
                     <li
-                      key={event.id}
+                      key={event.track.id + new Date(event.added_at).toISOString()}
                       className="rounded-md px-2 dark:hover:bg-gray-600 hover:bg-gray-300"
                     >
                       <a onClick={() => setSelectedDay(day)} className="flex group">
                         <p className="flex-auto truncate text-sm font-medium">
-                          {event.name}
+                          {event.track.name}
                         </p>
                       </a>
                     </li>
                   ))}
-                  {day.events.length > 2 && (
+                  {day.tracks.length > 2 && (
                     <li className="rounded-md px-2 dark:hover:bg-gray-600 hover:bg-gray-300" >
                       <a onClick={() => setSelectedDay(day)} className="flex group">
                         <p className="flex-auto truncate text-sm font-medium">
-                          + {day.events.length - 2} more
+                          + {day.tracks.length - 2} more
                         </p>
                       </a>
                     </li>

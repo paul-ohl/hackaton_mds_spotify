@@ -64,17 +64,24 @@ export default function Drawer({ selectedDay, setSelectedDay }: DrawerProps) {
                   </div>
                 </div>
                 <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                  {selectedDay?.events.map((event) => (
-                    <div key={event.id} className={classNames("flex items-center py-4 border-b", baseTheme.border)}>
+                  {selectedDay?.tracks.map((spotifyTrack) => (
+                    <div key={spotifyTrack.track.id + new Date(spotifyTrack.added_at).toISOString()} className={classNames("flex items-center py-4 border-b", baseTheme.border)}>
                       <Image
-                        src={event.imageLink}
-                        alt={"album cover for " + event.name}
+                        src={spotifyTrack.track.album.images[0].url}
+                        alt={"album cover for " + spotifyTrack.track.name}
                         className="rounded-md"
                         width="100"
                         height="100"
                         unoptimized
                       />
-                      <div className={classNames("text-sm font-semibold ml-3", baseTheme.text)}>{event.name}</div>
+                      <div className='ml-3'>
+                        <div className={classNames("text-md font-semibold", baseTheme.text)}>{spotifyTrack.track.name}</div>
+                        <div
+                          className="text-sm text-secondary dark:text-secondary-dark font-semibold"
+                        >
+                          {spotifyTrack.track.artists.map((a) => a.name).join(", ")}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>

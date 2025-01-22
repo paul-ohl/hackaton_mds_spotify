@@ -65,7 +65,7 @@ export function usePlaylistStorage() {
   const addPlaylist = async (playlistId: string): Promise<boolean> => {
     try {
       setError(null);
-      
+
       // Check if playlist already exists
       if (savedPlaylists.some(p => p.id === playlistId)) {
         return false;
@@ -114,7 +114,7 @@ export function usePlaylistStorage() {
     try {
       setError(null);
       const tracks = await fetchPlaylistData(playlistId);
-      
+
       if (!tracks) {
         return false;
       }

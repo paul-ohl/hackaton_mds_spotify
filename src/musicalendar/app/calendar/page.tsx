@@ -9,25 +9,18 @@ import {
   CalendarIcon,
   ArrowLeftIcon,
 } from '@heroicons/react/20/solid'
-import { getPlaylistTracks } from './fetch_songs';
 import Drawer from './_components/drawer';
 import MonthView from './_components/month_view';
 import Link from 'next/link';
+import { usePlaylist } from '../context/PlaylistContext';
+import { SpotifyTrack } from '../types/spotify';
 
 export type Day = {
   date: string;
-  events: Song[];
+  tracks: SpotifyTrack[];
   isCurrentMonth?: boolean;
   isToday?: boolean;
   isSelected?: boolean;
-};
-
-export type Song = {
-  id: string,
-  name: string,
-  dateAdded: Date,
-  imageLink: string,
-  href: string
 };
 
 function classNames(...classes: (string | boolean | undefined)[]) {
@@ -38,23 +31,15 @@ export default function Calendar() {
   const [selectedDay, setSelectedDay] = useState<Day | null>(null);
   const [currentView, setCurrentView] = useState('month');
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [songs, setSongs] = useState<SpotifyTrack[]>([]);
+
+  const { playlists } = usePlaylist();
 
   const formatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
 
   useEffect(() => {
-    getPlaylistTracks("37i9dQZF1DXcBWIGoYBM5M").then((data) => {
-      const songsData = JSON.parse(data).items;
-      setSongs(songsData
-        .map((s: any) => ({
-          id: s.added_at + s.track.id,
-          name: s.track.name + ' - ' + s.track.artistName,
-          dateAdded: new Date(s.added_at),
-          imageLink: s.track.album.images[0].url,
-          href: s.track.href,
-        })));
-    });
-  }, []);
+    setSongs(playlists[0]?.tracks?.items || []);
+  }, [playlists]);
 
   return (
     <div className="min-h-screen p-4 lg:p-8 bg-gray-50 dark:bg-gray-900" >
