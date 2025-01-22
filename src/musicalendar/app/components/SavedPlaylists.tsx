@@ -1,10 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { usePlaylist } from '../context/PlaylistContext';
 import { useEffect } from 'react';
 
 export default function SavedPlaylists() {
-  const { playlists, removePlaylist, refreshPlaylists, isLoading } = usePlaylist();
+  const { playlists, removePlaylist, refreshPlaylists, isLoading, setSelectedPlaylists } = usePlaylist();
 
   useEffect(() => {
     refreshPlaylists();
@@ -13,10 +14,10 @@ export default function SavedPlaylists() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">Playlists Sauvegardées</h2>
+        <h2 className="text-primary dark:text-primary-dark text-2xl font-semibold">Playlists Sauvegardées</h2>
         <button
           onClick={() => refreshPlaylists()}
-          className="btn-accent px-4 py-2 rounded-lg disabled:opacity-50"
+          className="text-primary dark:text-primary-dark px-4 py-2 rounded-lg disabled:opacity-50 bg-white dark:bg-gray-800 border border-border dark:border-border-dark"
           disabled={isLoading}
         >
           {isLoading ? 'Chargement...' : 'Rafraîchir'}
@@ -24,16 +25,23 @@ export default function SavedPlaylists() {
       </div>
 
       {playlists.length === 0 ? (
-        <p className="text-secondary text-center py-8">Aucune playlist sauvegardée</p>
+        <p className="text-secondary dark:text-secondary-dark text-center py-8">Aucune playlist sauvegardée</p>
       ) : (
         <div className="space-y-4">
           {playlists.map((playlist) => (
-            <div key={playlist.id} className="card rounded-lg p-4">
+            <div key={playlist.id} className="text-primary dark:text-primary-dark rounded-lg p-4 border border-border dark:border-border-dark">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-medium text-lg">{playlist.name}</h3>
-                  <p className="text-secondary text-sm">ID: {playlist.id}</p>
-                  <p className="text-secondary text-sm">
+                  <Link
+                    href="/calendar"
+                    onClick={() => {
+                      setSelectedPlaylists([playlist]);
+                    }}
+                  >
+                    <h3 className="font-medium hover:text-accent hover:dark:text-accent-dark text-lg">{playlist.name}</h3>
+                  </Link>
+                  <p className="text-secondary dark:text-secondary-dark text-sm">ID: {playlist.id}</p>
+                  <p className="text-secondary dark:text-secondary-dark text-sm">
                     Dernière mise à jour: {new Date(playlist.lastFetched).toLocaleString('fr-FR')}
                   </p>
                 </div>
@@ -62,20 +70,20 @@ export default function SavedPlaylists() {
                 <div className="mt-4 border-t pt-4">
                   <h4 className="font-medium mb-3">Pistes ({playlist.tracks.items.length})</h4>
                   <div className="max-h-60 overflow-y-auto">
-                    {playlist.tracks.items.map((item, index) => (
+                    {playlist.tracks.items.map((track) => (
                       <div
-                        key={index}
+                        key={track.track.id + track.added_at}//.toISOString()}
                         className="flex items-center py-2 border-b last:border-b-0"
                       >
                         <img
-                          src={item.track.album.images[0].url}
-                          alt={item.track.name}
+                          src={track.track.album.images[0].url}
+                          alt={track.track.name}
                           className="w-10 h-10 object-cover rounded"
                         />
                         <div className="ml-3">
-                          <p className="font-medium">{item.track.name}</p>
-                          <p className="text-secondary text-sm">
-                            Ajouté le: {new Date(item.added_at).toLocaleDateString('fr-FR')}
+                          <p className="font-medium">{track.track.name} - {track.track.artists.map((artist) => artist.name).join(", ")}</p>
+                          <p className="text-secondary dark:text-secondary-dark text-sm">
+                            Ajouté le: {new Date(track.added_at).toLocaleDateString('fr-FR')}
                           </p>
                         </div>
                       </div>

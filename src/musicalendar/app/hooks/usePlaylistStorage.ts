@@ -9,6 +9,7 @@ const REFRESH_INTERVAL = 30 * 60 * 1000; // 30 minutes
 
 export function usePlaylistStorage() {
   const [savedPlaylists, setSavedPlaylists] = useState<SavedPlaylist[]>([]);
+  const [selectedPlaylists, setSelectedPlaylists] = useState<SavedPlaylist[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -65,7 +66,7 @@ export function usePlaylistStorage() {
   const addPlaylist = async (playlistId: string): Promise<boolean> => {
     try {
       setError(null);
-      
+
       // Check if playlist already exists
       if (savedPlaylists.some(p => p.id === playlistId)) {
         return false;
@@ -114,7 +115,7 @@ export function usePlaylistStorage() {
     try {
       setError(null);
       const tracks = await fetchPlaylistData(playlistId);
-      
+
       if (!tracks) {
         return false;
       }
@@ -156,6 +157,8 @@ export function usePlaylistStorage() {
     addPlaylist,
     removePlaylist,
     refreshPlaylist,
-    fetchAllPlaylists
+    fetchAllPlaylists,
+    selectedPlaylists,
+    setSelectedPlaylists,
   };
 }

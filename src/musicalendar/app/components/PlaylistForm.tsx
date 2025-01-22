@@ -39,12 +39,12 @@ export default function PlaylistForm() {
   return (
     <div className="max-w-xl mx-auto">
       <div className="card rounded-lg p-6">
-        <h2 className="text-2xl font-semibold mb-6">Ajouter une playlist à votre calendrier</h2>
+        <h2 className="text-2xl text-primary dark:text-primary-dark font-semibold mb-6">Ajouter une playlist à votre calendrier</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
             <input
               type="text"
-              className="w-full p-3 border rounded-lg bg-transparent focus:outline-none focus:border-accent"
+              className="w-full text-secondary dark:text-secondary-dark p-3 border rounded-lg bg-transparent focus:outline-none focus:border-accent"
               placeholder="URL de la playlist Spotify"
               value={playlistUrl}
               onChange={(e) => setPlaylistUrl(e.target.value)}
@@ -53,7 +53,7 @@ export default function PlaylistForm() {
           </div>
           <button
             type="submit"
-            className="btn-accent w-full p-3 rounded-lg font-medium disabled:opacity-50"
+            className="text-primary dark:text-primary-dark bg-accent dark:bg-accent-dark w-full p-3 rounded-lg font-medium disabled:opacity-50"
             disabled={isLoading}
           >
             {isLoading ? 'Chargement...' : 'Ajouter la playlist'}

@@ -4,14 +4,20 @@ export interface SpotifyTrack {
     id: string;
   };
   track: {
+    id: string;
     name: string;
     album: {
+      name: string;
+      release_date: string;
       images: {
         url: string;
         height: number;
         width: number;
       }[];
     };
+    artists: {
+      name: string;
+    }[];
   };
 }
 
@@ -33,4 +39,6 @@ export interface PlaylistContextType {
   addPlaylist: (playlistId: string) => Promise<boolean>;
   removePlaylist: (playlistId: string) => void;
   refreshPlaylists: () => Promise<void>;
+  selectedPlaylists: SavedPlaylist[];
+  setSelectedPlaylists: (playlists: SavedPlaylist[]) => void;
 }
