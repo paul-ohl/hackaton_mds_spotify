@@ -1,10 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { usePlaylist } from '../context/PlaylistContext';
 import { useEffect } from 'react';
 
 export default function SavedPlaylists() {
-  const { playlists, removePlaylist, refreshPlaylists, isLoading } = usePlaylist();
+  const { playlists, removePlaylist, refreshPlaylists, isLoading, setSelectedPlaylists } = usePlaylist();
 
   useEffect(() => {
     refreshPlaylists();
@@ -31,7 +32,14 @@ export default function SavedPlaylists() {
             <div key={playlist.id} className="text-primary dark:text-primary-dark rounded-lg p-4 border border-border dark:border-border-dark">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="font-medium text-lg">{playlist.name}</h3>
+                  <Link
+                    href="/calendar"
+                    onClick={() => {
+                      setSelectedPlaylists([playlist]);
+                    }}
+                  >
+                    <h3 className="font-medium hover:text-accent hover:dark:text-accent-dark text-lg">{playlist.name}</h3>
+                  </Link>
                   <p className="text-secondary dark:text-secondary-dark text-sm">ID: {playlist.id}</p>
                   <p className="text-secondary dark:text-secondary-dark text-sm">
                     Dernière mise à jour: {new Date(playlist.lastFetched).toLocaleString('fr-FR')}

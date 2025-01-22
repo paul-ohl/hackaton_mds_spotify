@@ -33,13 +33,13 @@ export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [songs, setSongs] = useState<SpotifyTrack[]>([]);
 
-  const { playlists } = usePlaylist();
+  const { selectedPlaylists } = usePlaylist();
 
   const formatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' });
 
   useEffect(() => {
-    setSongs(playlists[0]?.tracks?.items || []);
-  }, [playlists]);
+    setSongs(selectedPlaylists.flatMap((playlist) => playlist.tracks?.items || []));
+  }, [selectedPlaylists]);
 
   return (
     <div className="min-h-screen p-4 lg:p-8 bg-gray-50 dark:bg-gray-900" >

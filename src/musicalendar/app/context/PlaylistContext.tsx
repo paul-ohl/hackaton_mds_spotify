@@ -15,6 +15,8 @@ export function PlaylistProvider({ children }: { children: ReactNode }) {
     addPlaylist,
     removePlaylist,
     fetchAllPlaylists,
+    selectedPlaylists,
+    setSelectedPlaylists,
   } = usePlaylistStorage();
 
   // Fetch all playlists when not loading
@@ -34,6 +36,8 @@ export function PlaylistProvider({ children }: { children: ReactNode }) {
     addPlaylist,
     removePlaylist,
     refreshPlaylists,
+    selectedPlaylists,
+    setSelectedPlaylists,
   };
 
   return (

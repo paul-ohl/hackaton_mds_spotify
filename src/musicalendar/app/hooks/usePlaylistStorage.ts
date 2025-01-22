@@ -9,6 +9,7 @@ const REFRESH_INTERVAL = 30 * 60 * 1000; // 30 minutes
 
 export function usePlaylistStorage() {
   const [savedPlaylists, setSavedPlaylists] = useState<SavedPlaylist[]>([]);
+  const [selectedPlaylists, setSelectedPlaylists] = useState<SavedPlaylist[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -156,6 +157,8 @@ export function usePlaylistStorage() {
     addPlaylist,
     removePlaylist,
     refreshPlaylist,
-    fetchAllPlaylists
+    fetchAllPlaylists,
+    selectedPlaylists,
+    setSelectedPlaylists,
   };
 }

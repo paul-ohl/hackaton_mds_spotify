@@ -39,4 +39,6 @@ export interface PlaylistContextType {
   addPlaylist: (playlistId: string) => Promise<boolean>;
   removePlaylist: (playlistId: string) => void;
   refreshPlaylists: () => Promise<void>;
+  selectedPlaylists: SavedPlaylist[];
+  setSelectedPlaylists: (playlists: SavedPlaylist[]) => void;
 }
