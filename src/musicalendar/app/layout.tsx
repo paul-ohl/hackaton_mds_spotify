@@ -2,7 +2,6 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { PlaylistProvider } from './context/PlaylistContext';
-import { ThemeProvider } from './context/ThemeContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,9 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen transition-colors duration-200`}>
-        <ThemeProvider>
-          <PlaylistProvider>{children}</PlaylistProvider>
-        </ThemeProvider>
+        <PlaylistProvider>{children}</PlaylistProvider>
       </body>
     </html>
   );
