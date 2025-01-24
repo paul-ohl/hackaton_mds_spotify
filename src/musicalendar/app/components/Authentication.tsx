@@ -9,7 +9,7 @@ const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI;
 
 const scopes = ['user-read-private', 'user-read-email'];
 
-const AuthenticationPage = () => {
+export default function Authentication(){
     const router = useRouter();
 
     const handleLogin = () => {
@@ -34,12 +34,12 @@ const AuthenticationPage = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '100vh',
+                marginTop: '2rem',
             }}
         >
             <div style={{ textAlign: 'center' }}>
                 <h1>Login to Spotify</h1>
-                <p>Click the button below to log in with your Spotify account.</p>
+                <p>You'll be allowed to load all your playlists</p>
                 <button
                     onClick={handleLogin}
                     style={{
@@ -53,11 +53,9 @@ const AuthenticationPage = () => {
                         fontWeight: 'bold',
                     }}
                 >
-                    Login with Spotify
+                    <img src="/logos/Full_Logo_Green_RGB.svg" alt="Spotify logo" width="200" height="120" />
                 </button>
             </div>
         </div>
     );
 };
-
-export default AuthenticationPage;

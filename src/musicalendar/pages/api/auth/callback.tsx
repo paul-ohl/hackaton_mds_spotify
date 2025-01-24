@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 id,
                 display_name,
                 email,
-                images: images || [], // Fallback in case images array is empty
+                images: images || [],
             },
             token: {
                 access_token,
@@ -59,11 +59,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
         };
 
-        // Set the session as a cookie
-        await setAuthCookie(res, userSession); // Set the session as cookie
+        await setAuthCookie(res, userSession);
 
-        // Redirect user to a profile page or a dashboard
-        res.redirect('/calendar');
+        res.redirect('/');
     } catch (error) {
         console.error('Error exchanging code for token:', error);
         res.status(500).json({ error: 'Failed to authenticate with Spotify' });
